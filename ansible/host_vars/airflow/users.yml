@@ -1,6 +1,6 @@
 users_host_airflow:
   - username: 
     use_sudo: 
-    groups: wmd2c
+    groups: airflowgrp
     state: present
     ssh_key: 
