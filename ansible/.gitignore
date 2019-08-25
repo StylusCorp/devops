@@ -1,0 +1,10 @@
+.idea/
+.*
+*~
+*.retry
+*.log
+metastore_db/*
+ssh.cfg
+ssh-1b.cfg
+ssh-1a.cfg
+!.gitignore

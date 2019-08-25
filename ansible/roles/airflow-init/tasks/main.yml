@@ -1,0 +1,28 @@
+- name: 'Clone git repo wmd2c-airflow'
+  git:
+    repo: git@github.com:HBOCodeLabs/wmd2c-airflow.git
+    dest: "/home/{{wmd2c}}/repos/hbo/github/HBOCodeLabs/wmd2c-airflow"
+    key_file: ~/.ssh/id_rsa
+    accept_hostkey: yes
+  tags: pull
+  
+- name: 'Create Airflow UI user'
+  become_user: airflow
+  shell: bash /opt/airflow/role_based_user_creation.sh -u {{ user_name }} -e {{ email_id }} -g {{ directory_name }} -f {{ first_name }} -l {{ last_name }} -p {{ password }}
+  register: airflow_op
+  tags: 
+    - airflow_ui_user
+    - airflow_user_individual
+
+- name: 'Copy Airflow credentials file from Airflow Server to Jenkins'
+  fetch:
+    src: '/home/airflow/{{ email_id }}'
+    dest: '{{ build_no_path }}/{{ email_id }}'
+    flat: yes
+  tags: airflow_ui_user
+  
+- name: 'Remove credentials file from /home/airflow'
+  become_user: airflow
+  shell: 'rm -rf /home/airflow/{{ email_id }}'
+  tags: airflow_ui_user
+  

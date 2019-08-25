@@ -1,0 +1,11 @@
+- name: clone repo
+  become: yes
+  become_user: '{{ username }}'
+  git: 
+    repo: '{{ reponame }}'
+    dest: '{{ destfolder }}'
+    remote: '{{ origin }}'
+    update: yes
+    version: '{{ branchname }}' 
+  tags:
+     clonerepo

@@ -1,0 +1,36 @@
+---
+- name: Add users | create users, shell, home dirs
+  become: yes
+  user: name={{ username }} groups=wmd2cgrp
+    shell=/bin/bash createhome=yes comment='Created with Ansible' state={{ state }}
+  tags: [user, sudo]
+
+- name: Setup | authorized key upload
+  become: yes
+  authorized_key: 
+    user: '{{ username }}'
+    key: "{{ lookup('file', '{{ pub_key_path }}') }}"
+    exclusive: 'yes'
+  tags: [user, sudo]
+
+- name: Sudoers | update sudoers file and validate
+  become: yes
+  lineinfile: 
+    dest: /etc/sudoers
+    insertafter: EOF
+    line: '{{ username }} ALL=(ALL) NOPASSWD: ALL'
+    regexp: '^{{ username }} .*'
+    state: present
+  tags: [sudo]
+
+- name: Creating hdfs path /user/USER
+  become: yes
+  become_user: hadoop
+  shell: |
+    set -e
+    hadoop fs -mkdir -p /user/{{ username }}
+    hadoop fs -chown -R {{ username }}:hadoop /user/{{ username }}
+  args:
+    executable: /bin/bash
+  when: "'emr' in inventory_hostname"
+  tags: [user, sudo]
