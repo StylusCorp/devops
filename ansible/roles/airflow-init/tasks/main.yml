@@ -1,7 +1,7 @@
-- name: 'Clone git repo wmd2c-airflow'
+- name: 'Clone git repo airflow'
   git:
-    repo: git@github.com:HBOCodeLabs/wmd2c-airflow.git
-    dest: "/home/{{wmd2c}}/repos/hbo/github/HBOCodeLabs/wmd2c-airflow"
+    repo: git@github.com:StylusCorp/airflow.git
+    dest: "/home/{{airflow}}/repos/hbo/github/StylusCorp/airflow"
     key_file: ~/.ssh/id_rsa
     accept_hostkey: yes
   tags: pull

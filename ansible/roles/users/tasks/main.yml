@@ -1,7 +1,7 @@
 ---
 - name: Add users | create users, shell, home dirs
   become: yes
-  user: name={{ username }} groups=wmd2cgrp
+  user: name={{ username }} groups=airflwgrp
     shell=/bin/bash createhome=yes comment='Created with Ansible' state={{ state }}
   tags: [user, sudo]
 

@@ -1,25 +1,25 @@
 - name: 'Create IAM USER for {{ user_name }}'
   become_user: jenkins
-  shell: 'AWS_PROFILE={{env}} python {{workspace_path}}/wmd2c-devops-admin/python/iam/iam_user_create.py -a {{ env }} -d {{ directory }} -u {{ user_name }} -e {{ email_id }} -p {{ build_no_path }}'
+  shell: 'AWS_PROFILE={{env}} python {{workspace_path}}/devops/python/iam/iam_user_create.py -a {{ env }} -d {{ directory }} -u {{ user_name }} -e {{ email_id }} -p {{ build_no_path }}'
   tags: create_iam_user
   
 - name: 'Create Snowflake user for {{ user_name }}'
   become_user: jenkins
-  shell: 'python {{workspace_path}}/wmd2c-devops-admin/python/snowflake/snowflake_usercreate.py --admin_user {{ sf_user }} --admin_passwd {{ sf_pass }} --email_id {{ email_id }} --role {{ role }} --creds_file_path {{ creds_file }}'
+  shell: 'python {{workspace_path}}/devops/python/snowflake/snowflake_usercreate.py --admin_user {{ sf_user }} --admin_passwd {{ sf_pass }} --email_id {{ email_id }} --role {{ role }} --creds_file_path {{ creds_file }}'
   tags: create_sf_user
   
 - name: 'Send User Notification to {{ user_name }}'
   become_user: jenkins
-  shell: 'python {{workspace_path}}/wmd2c-devops-admin/python/ses/user_notify.py -a {{ env }} -u {{ user_name }} -e {{ email_id }} -b {{ build_no_path }}'
+  shell: 'python {{workspace_path}}/devops/python/ses/user_notify.py -a {{ env }} -u {{ user_name }} -e {{ email_id }} -b {{ build_no_path }}'
   tags: post_build_notify_user
   
 - name: 'Send User Notification to {{ user_name }}'
   become_user: jenkins
-  shell: 'python {{workspace_path}}/wmd2c-devops-admin/python/ses/user_notify_attachment_v2.py -a {{ env }} -u {{ user_name }} -e {{ email_id }} -b {{ build_no_path }} -f {{ first_name }} -c {{ config_path }}'
+  shell: 'python {{workspace_path}}/devops/python/ses/user_notify_attachment_v2.py -a {{ env }} -u {{ user_name }} -e {{ email_id }} -b {{ build_no_path }} -f {{ first_name }} -c {{ config_path }}'
   tags: post_build_attachfile
   
 
 - name: 'Store Jenkins Credentials to file for user {{ user_name }}'
   become_user: jenkins
-  shell: 'bash {{workspace_path}}/wmd2c-devops-admin/bash_scripts/jenkins_wrapper_user.sh {{ user_name }} {{ password }} {{ creds_file_path }}'
+  shell: 'bash {{workspace_path}}/devops/bash_scripts/jenkins_wrapper_user.sh {{ user_name }} {{ password }} {{ creds_file_path }}'
   tags: jenkins_user_wrapper
