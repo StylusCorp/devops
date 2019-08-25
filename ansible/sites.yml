@@ -1,14 +1,6 @@
 ---
 - hosts: airflow
   roles:
-  - common
-  - airflowconfig
-  - ec2useradd
   - clonerepo
 
-- hosts: jenkins
-  roles:
-  - common
-  - jenkinsinstall
-  - ec2useradd
 
